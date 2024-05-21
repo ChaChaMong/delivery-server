@@ -15,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "option")
+@Table(name = "options")
 public class Option extends BaseEntity {
     @Column(name = "name", columnDefinition = "VARCHAR(200)")
     private String name;
