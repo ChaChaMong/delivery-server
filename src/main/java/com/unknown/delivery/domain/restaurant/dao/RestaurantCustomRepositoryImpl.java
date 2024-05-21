@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.unknown.delivery.domain.restaurant.entity.QRestaurant.restaurant;
 
@@ -26,5 +27,19 @@ public class RestaurantCustomRepositoryImpl implements RestaurantCustomRepositor
                 .from(restaurant)
                 .where(builder)
                 .fetch();
+    }
+
+    @Override
+    public Optional<Restaurant> findByRestaurantId(Long restaurantId) {
+        BooleanBuilder builder = new BooleanBuilder();
+
+        builder.and(restaurant.id.eq(restaurantId))
+                .and(restaurant.deletedAt.isNull());
+
+        return Optional.ofNullable(jpaQueryFactory
+                .select(restaurant)
+                .from(restaurant)
+                .where(builder)
+                .fetchFirst());
     }
 }
