@@ -39,3 +39,4 @@ out/
 ### CUSTOM ###
 delivery_db.mv.db
 delivery_db.trace.db
+application-secret.yml
