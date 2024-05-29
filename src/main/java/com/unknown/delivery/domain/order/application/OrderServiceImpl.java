@@ -96,10 +96,12 @@ public class OrderServiceImpl implements OrderService {
             for (Map<String, Object> option : options) {
                 Long optionId = Long.parseLong(option.get("option_id").toString());
                 String optionName = option.get("name").toString();
+                String optionType = option.get("type").toString();
+
                 Option optionEntity = optionRepository.findById(optionId)
                         .orElseThrow(() -> new BusinessException(HttpResponse.Fail.NOT_FOUND_OPTION));
 
-                if (!optionName.equals(optionEntity.getName())) {
+                if (!optionName.equals(optionEntity.getName()) || !optionType.equals(optionEntity.getType().toString())) {
                     throw new BusinessException(HttpResponse.Fail.OPTION_MISMATCH);
                 }
 
