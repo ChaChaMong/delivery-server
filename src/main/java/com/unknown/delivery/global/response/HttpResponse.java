@@ -29,6 +29,11 @@ public class HttpResponse {
     public enum Fail {
         // 400
         BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청 입니다."),
+        RESTAURANT_MISMATCH(HttpStatus.BAD_REQUEST, "잘못된 매장 요청 입니다."),
+        MENU_MISMATCH(HttpStatus.BAD_REQUEST, "잘못된 메뉴 요청 입니다."),
+        OPTION_MISMATCH(HttpStatus.BAD_REQUEST, "잘못된 옵션 요청 입니다."),
+        OPTION_DETAIL_MISMATCH(HttpStatus.BAD_REQUEST, "잘못된 옵션상세 요청 입니다."),
+        TOTAL_PRICE_MISMATCH(HttpStatus.BAD_REQUEST, "잘못된 총 가격 요청 입니다."),        
 
         // 401
         UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증되지 않은 접근입니다."),
@@ -39,6 +44,9 @@ public class HttpResponse {
         // 404
         NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 리소스입니다."),
         NOT_FOUND_RESTAURANT(HttpStatus.NOT_FOUND, "존재하지 않는 매장입니다."),
+        NOT_FOUND_MENU(HttpStatus.NOT_FOUND, "존재하지 않는 메뉴입니다."),
+        NOT_FOUND_OPTION(HttpStatus.NOT_FOUND, "존재하지 않는 옵션입니다."),
+        NOT_FOUND_OPTION_DETAIL(HttpStatus.NOT_FOUND, "존재하지 않는 옵션상세입니다."),
 
         // 405
         METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "허용되지 않은 HTTP METHOD 입니다."),
