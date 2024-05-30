@@ -81,13 +81,14 @@ public class OrderServiceImpl implements OrderService {
             BigDecimal menuPrice = BigDecimal.valueOf(Long.parseLong(item.get("price").toString()));
             BigDecimal menuQuantity = BigDecimal.valueOf(Long.parseLong(item.get("quantity").toString()));
 
-            menuPrice = menuPrice.multiply(menuQuantity);
-            sumPrice = sumPrice.add(menuPrice);
+            BigDecimal tempPrice = menuPrice.multiply(menuQuantity);
+            sumPrice = sumPrice.add(tempPrice);
 
             Menu menu = menuRepository.findById(menuId)
                     .orElseThrow(() -> new BusinessException(HttpResponse.Fail.NOT_FOUND_MENU));
 
-            if (!menuName.equals(menu.getName())) {
+            if (!menuName.equals(menu.getName())
+                    || menuPrice.compareTo(menu.getPrice()) != 0) {
                 throw new BusinessException(HttpResponse.Fail.MENU_MISMATCH);
             }
 
@@ -117,14 +118,15 @@ public class OrderServiceImpl implements OrderService {
                     OptionDetail optionDetail = optionDetailRepository.findById(optionDetailId)
                             .orElseThrow(() -> new BusinessException(HttpResponse.Fail.NOT_FOUND_OPTION_DETAIL));
 
-                    if (!optionDetailName.equals(optionDetail.getName())) {
+                    if (!optionDetailName.equals(optionDetail.getName())
+                            || optionDetailPrice.compareTo(optionDetail.getPrice()) != 0) {
                         throw new BusinessException(HttpResponse.Fail.OPTION_DETAIL_MISMATCH);
                     }
                 }
             }
         }
 
-        if (!totalPrice.equals(sumPrice)) {
+        if (totalPrice.compareTo(sumPrice) != 0) {
             throw new BusinessException(HttpResponse.Fail.TOTAL_PRICE_MISMATCH);
         }
 
