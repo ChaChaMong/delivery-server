@@ -47,7 +47,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponse createOrder(OrderRequest orderRequest) {
         Map<String, Object> content = orderRequest.getContent();
         Restaurant restaurant = validateContent(content);
-        BigDecimal totalPrice = getTotalPrice(content);
+        BigDecimal totalPrice = validateAndCalculateTotalPrice(content);
 
         Order order = OrderRequest.toEntity(orderRequest, restaurant, totalPrice);
         orderRepository.save(order);
@@ -69,7 +69,7 @@ public class OrderServiceImpl implements OrderService {
         return restaurant;
     }
 
-    private BigDecimal getTotalPrice(Map<String, Object> content) {
+    private BigDecimal validateAndCalculateTotalPrice(Map<String, Object> content) {
         BigDecimal totalPrice = BigDecimal.valueOf(Long.parseLong(content.get("total_price").toString()));
         BigDecimal sumPrice = BigDecimal.valueOf(0L);
 
