@@ -9,6 +9,9 @@ import com.unknown.delivery.domain.restaurant.entity.Restaurant;
 import com.unknown.delivery.global.exception.BusinessException;
 import com.unknown.delivery.global.response.HttpResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,14 +33,13 @@ public class RestaurantServiceImpl implements RestaurantService{
     }
 
     @Override
-    public List<OrderResponse> getRestaurantOrders(Long id) {
+    public Page<OrderResponse> getRestaurantOrders(Long id, int page, int size) {
         Restaurant restaurant = restaurantRepository.findByRestaurantId(id)
                 .orElseThrow(() -> new BusinessException(HttpResponse.Fail.NOT_FOUND_RESTAURANT));
 
-        List<Order> orders = orderRepository.findOrdersByRestaurant(restaurant);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Order> orders = orderRepository.findOrdersByRestaurant(restaurant, pageable);
 
-        return orders.stream()
-                .map(OrderResponse::of)
-                .collect(Collectors.toList());
+        return orders.map(OrderResponse::of);
     }
 }

@@ -3,12 +3,14 @@ package com.unknown.delivery.domain.restaurant.api;
 import com.unknown.delivery.domain.order.dto.OrderResponse;
 import com.unknown.delivery.domain.restaurant.application.RestaurantService;
 import com.unknown.delivery.domain.restaurant.dto.RestaurantResponse;
+import com.unknown.delivery.global.response.PageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -25,9 +27,12 @@ public class RestaurantController {
     }
 
     @GetMapping("{id}/orders")
-    public ResponseEntity<List<OrderResponse>> getRestaurantOrders(
-            @PathVariable("id") Long id) {
-        List<OrderResponse> responses = this.restaurantService.getRestaurantOrders(id);
+    public ResponseEntity<PageResponse<OrderResponse>> getRestaurantOrders(
+            @PathVariable("id") Long id,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "20") int size
+    ) {
+        PageResponse<OrderResponse> responses = PageResponse.of(this.restaurantService.getRestaurantOrders(id, page, size));
         return ResponseEntity.ok().body(responses);
     }
 }
