@@ -5,6 +5,7 @@ import com.unknown.delivery.domain.restaurant.application.RestaurantService;
 import com.unknown.delivery.domain.restaurant.dto.RestaurantResponse;
 import com.unknown.delivery.global.response.PageResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -30,9 +32,11 @@ public class RestaurantController {
     public ResponseEntity<PageResponse<OrderResponse>> getRestaurantOrders(
             @PathVariable("id") Long id,
             @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "size", defaultValue = "20") int size
+            @RequestParam(name = "size", defaultValue = "20") int size,
+            @RequestParam(name = "start", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @RequestParam(name = "end", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end
     ) {
-        PageResponse<OrderResponse> responses = PageResponse.of(this.restaurantService.getRestaurantOrders(id, page, size));
+        PageResponse<OrderResponse> responses = PageResponse.of(this.restaurantService.getRestaurantOrders(id, page, size, start, end));
         return ResponseEntity.ok().body(responses);
     }
 }

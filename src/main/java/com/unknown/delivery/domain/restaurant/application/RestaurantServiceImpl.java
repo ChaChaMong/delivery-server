@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,12 +34,12 @@ public class RestaurantServiceImpl implements RestaurantService{
     }
 
     @Override
-    public Page<OrderResponse> getRestaurantOrders(Long id, int page, int size) {
+    public Page<OrderResponse> getRestaurantOrders(Long id, int page, int size, LocalDate start, LocalDate end) {
         Restaurant restaurant = restaurantRepository.findByRestaurantId(id)
                 .orElseThrow(() -> new BusinessException(HttpResponse.Fail.NOT_FOUND_RESTAURANT));
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<Order> orders = orderRepository.findOrdersByRestaurant(restaurant, pageable);
+        Page<Order> orders = orderRepository.findOrdersByRestaurant(restaurant, pageable, start, end);
 
         return orders.map(OrderResponse::of);
     }

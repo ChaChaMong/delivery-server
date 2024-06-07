@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.unknown.delivery.domain.order.entity.QOrder.order;
@@ -21,11 +22,19 @@ public class OrderCustomRepositoryImpl implements OrderCustomRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<Order> findOrdersByRestaurant(Restaurant restaurant, Pageable pageable) {
+    public Page<Order> findOrdersByRestaurant(Restaurant restaurant, Pageable pageable, LocalDate start, LocalDate end) {
         BooleanBuilder builder = new BooleanBuilder();
 
         builder.and(order.restaurant.eq(restaurant))
                 .and(order.deletedAt.isNull());
+
+        if (start != null && end != null) {
+            builder.and(order.createdAt.between(start.atStartOfDay(), end.atTime(23, 59, 59)));
+        } else if (start == null && end != null) {
+            builder.and(order.createdAt.before(end.atTime(23, 59, 59)));
+        } else if (start != null) {
+            builder.and(order.createdAt.after(start.atStartOfDay()));
+        }
 
         List<Order> orders = jpaQueryFactory
                 .select(order)
