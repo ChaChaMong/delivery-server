@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,18 +29,6 @@ public class OrderServiceImpl implements OrderService {
     private final MenuRepository menuRepository;
     private final OptionRepository optionRepository;
     private final OptionDetailRepository optionDetailRepository;
-
-    @Override
-    public List<OrderResponse> getOrders(Long restaurantId) {
-        Restaurant restaurant = restaurantRepository.findByRestaurantId(restaurantId)
-                .orElseThrow(() -> new BusinessException(HttpResponse.Fail.NOT_FOUND_RESTAURANT));
-
-        List<Order> orders = orderRepository.findOrdersByRestaurant(restaurant);
-
-        return orders.stream()
-                .map(OrderResponse::of)
-                .collect(Collectors.toList());
-    }
 
     @Override
     public OrderResponse createOrder(OrderRequest orderRequest) {
