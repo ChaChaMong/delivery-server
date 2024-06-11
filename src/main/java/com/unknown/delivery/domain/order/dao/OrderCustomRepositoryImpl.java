@@ -40,6 +40,7 @@ public class OrderCustomRepositoryImpl implements OrderCustomRepository {
                 .select(order)
                 .from(order)
                 .where(builder)
+                .orderBy(order.createdAt.desc())
                 .orderBy(order.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
